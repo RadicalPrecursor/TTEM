@@ -9,8 +9,7 @@
 
     <h3>𝑓 to MIDI frequency</h3>
 
-    MIDI pitches are expressed as integers from 0 - 127.  They are calculated as a function of real-time frequency 𝑓 as:
-    <br>
+    <p>MIDI pitches are expressed as integers from 0 - 127.  They are calculated as a function of real-time frequency 𝑓 as:</p>
     𝑚 = 69 + 12 log_2 (𝑓/440)
     <br>
 
@@ -51,6 +50,48 @@
     return false; // Stop form submit
     }
     </script>
+
+    <h3>Frequency Transposition</h3>
+
+    <p>A real-time frequency 𝑓 will correspond directly to a percieved pitch, and the musical relationships betweene pitches can be expressed mathematically as so: </p>
+
+    𝑓(t) = (2^(ℎ/12))𝑓(i)
+
+    <p>where 𝑓(i) is the initial frequency, and 𝑓(t) is the frequency with the halfstep relation corresponding to ℎ halfsteps.</p>
+    <form onsubmit="return transposeFreq();">
+        initial frequency, in Hz = <input type="text" id="initialFreq"/>
+        number of halfsteps = <input type="text" id="halfsteps"/>
+        <br>
+        <input type="submit" value="Convert!"/>
+        <br>
+        transposed frequency, in Hz = <input type="text" id="transpResult" readonly/>
+
+    </form>
+
+    <script>
+    function transposeFreq () {
+    var freq_i = parseFloat(document.getElementById("initialFreq").value);
+    var h = parseFloat(document.getElementById("halfsteps").value);
+    result = freq_i * 2**(h/12);
+    document.getElementById("transpResult").value = result;
+    return false; // Stop form submit
+    }
+    </script>
+    <p>A full octave corresponds to twelve halfsteps, and thus increasing by ℎ = 12 halfsteps will double the initial frequency.</p>
+
+    <h3>Transposition Formulas for Looping Wavetables</h3>
+
+    <p>To solve the real-time frequency 𝑓 for a desired halfstep ℎ, the formula: </p>
+
+    𝑓 = (2^(ℎ/12)𝑅)/𝑁 <br>
+
+    <p>Conversely, to solve the number 𝑁 of samples in a wavetable to achieve ℎ from a starting frequency 𝑓: </p>
+
+    𝑁 = ((2^(ℎ/12)𝑅)/𝑓) <br>
+
+    <p>The sample rate 𝑅 is typically standardized to 44100 samples/s.</p>
+
+
 
 
 
@@ -94,11 +135,11 @@
     𝑑 = 20 log (𝑎/𝑎(0))
 
     where:
-    𝑑 are decibels, a unitless quantitiy
+    𝑑 are decibels
     log is the base-10 logarithm
-    𝑎(0) is the reference frequency
+    𝑎(0) is the reference amplitude
 
-    The typical reference requency in digital audio assumes the hardware has a maximum amplitude of 1, and takes 𝑎(0) = 10^(-5) = 0.00001
+    The typical reference amplitude in digital audio assumes the hardware has a maximum amplitude of 1, and takes 𝑎(0) = 10^(-5) = 0.00001
 
     </pre>
 
